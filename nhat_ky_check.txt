@@ -1,0 +1,15 @@
+KẾT QUẢ KIỂM TRA CHỮ KÝ SỐ
+==========================
+Tệp: duy_da_ky.pdf
+Thời gian: 2025-11-06 16:32:28
+------------------------------------------------
+ 1. ByteRange & Contents  ✓ HỢP LỆ
+ 2. PKCS#7                ✓ HỢP LỆ
+ 3. messageDigest         ✓ HỢP LỆ
+ 4. Chữ ký (public key)   ✓ HỢP LỆ
+ 5. Chuỗi tin cậy         ✓ HỢP LỆ
+ 6. OCSP/CRL              ✓ HỢP LỆ
+ 7. Timestamp             • KHÔNG CẦN
+ 8. Incremental update    ✓ HỢP LỆ
+------------------------------------------------
+KẾT LUẬN: HỢP LỆ

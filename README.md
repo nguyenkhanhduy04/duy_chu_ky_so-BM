@@ -1,46 +1,63 @@
-# duy_chu_ky_so-BM  
-MÔN: AN TOÀN VÀ BẢO MẬT THÔNG TIN   
-Giáo viên: Dỗ Duy 
-Sinh viên: Nguyên Khánh Duy – K225480106008  
-Chủ đề: Phân tích và hiện thực chữ ký số trong file PDF  
+# Bài tập chữ ký số – Hướng dẫn nhanh
 
-1.  DUY.pdf (Bản gốc trước khi ký)  
-Nội dung: Đây là báo cáo cuối cùng của bạn (4 trang), trình bày theo đúng yêu cầu: có phần lý thuyết, quy trình kỹ thuật, rủi ro, tài liệu tham khảo.  
-Nhận xét:  
-✅ Cấu trúc rất rõ ràng, đúng bố cục “I–VII”.  
-✅ Có tiêu đề, tên sinh viên, mã số sinh viên, chủ đề và tài liệu tham khảo.  
-✅ Đúng format nộp bài: ≤ 6 trang.  
-<img width="1920" height="1042" alt="image" src="https://github.com/user-attachments/assets/7557fc74-5465-4205-9f31-34d4f9ae4991" />  
+Các file chính:
+- `tao_khoa.py`: Tạo cặp khóa, chứng chỉ tự ký và gói `cert.pfx` (mật khẩu 1234).
+- `tao_pdf_mau.py`: Tạo file PDF mẫu 4 trang `DUY.pdf` để ký.
+- `ky.py`: Ký số lên PDF bằng gói `cert.pfx` (tạo file `Duy_da_ky.pdf`).
+- `check_ky.py`: Kiểm tra chữ ký số trong PDF (ghi 8 dòng kết quả vào `nhat_ky_check.txt`).
 
-2. VSCode mở file ky.py  
-Nội dung: Bạn đang viết code ký số PDF bằng thư viện PyPDF2 + cryptography + reportlab.  
-Các bước trong code:  
-Đọc file PDF gốc (DUY.pdf)  
-Nạp chứng chỉ từ cert.pfx  
-Tạo thông tin chữ ký (dct): tên, lý do, vị trí, ngày giờ, liên hệ.  
-Ghi kết quả ra file mới Duy_da_ky.pdf.  
-Nhận xét kỹ thuật:  
-✅ Cấu trúc code rõ, đúng logic 8 bước ký PDF (chuẩn đề bài).  
-✅ Bạn có lưu log (“Số trang PDF gốc”, “Đã ký thành công”).  
-✅ Các file private_key.pem, public_key.pem, cert.pfx nằm cùng thư mục — đủ để minh họa quy trình end-to-end.  
-<img width="1920" height="1014" alt="image" src="https://github.com/user-attachments/assets/59795ba4-fddb-462d-8eb8-7b2a020ddec2" />  
+## Cài môi trường và thư viện
 
-3. Duy_da_ky.pdf (kết quả sau ký)  
-Nội dung: Tài liệu đã có chữ ký hiển thị ở cuối trang với chữ “Nguyễn Khánh Duy”, ngày ký, số điện thoại và hình ảnh chữ ký tay.  
-Nhận xét:  
-✅ Bố cục đẹp, chữ ký hiển thị đúng vị trí.  
-✅ Thời gian ký (2025-11-06 16:16) được thêm tự động từ script — đúng yêu cầu mục 2 trong đề (“Thời gian ký được lưu ở đâu”).  
-✅ Đúng quy trình “Incremental update”: nội dung gốc không đổi, chỉ thêm chữ ký.  
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/121a9937-9a3b-451f-ae9c-118aeb9c7ba7" />   
+1) Cài Python 3.10+ trên Windows.
+2) Cài các thư viện:
 
-4. Kết quả kiểm tra chữ ký số (check_ky.py)  
-Kết quả hiển thị:  
-Tất cả các bước kiểm tra (ByteRange, PKCS#7, messageDigest, public key, chuỗi tin cậy, OCSP/CRL, incremental update) đều cho kết quả ✓ HỢP LỆ, timestamp không bắt buộc.  
-Nhận xét:  
-✅ Script hoạt động chính xác, xác minh đầy đủ các yếu tố của chữ ký số.  
-✅ Kết luận “HỢP LỆ” chứng tỏ tài liệu chưa bị sửa đổi và chứng chỉ còn hiệu lực.  
-✅ Thể hiện quy trình xác thực hoàn chỉnh theo chuẩn PKCS#7/PAdES.  
-✅ Và tạo ra 1 file nhật ký check để lưu lại lịch sửa check  
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4df4648a-411f-4a04-8608-d5ccfc689eb3" />  
+```powershell
+pip install -r requirements.txt
+```
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b51cfebf-6f21-4463-b4a9-5f33b809a80b" />  
+## Tạo khóa và chứng chỉ tự ký
+
+Chạy tạo khóa/cert và gói PFX (pass: 1234):
+
+```powershell
+python .\tao_khoa.py
+```
+
+Sinh ra các file:
+- `private_key.pem`, `public_key.pem`
+- `cert.pem`, `cert.cer`
+- `cert.pfx` (mật khẩu 1234)
+
+## Tạo PDF mẫu để ký
+
+```powershell
+python .\tao_pdf_mau.py
+```
+
+Sinh `DUY.pdf` (4 trang). Bạn có thể thay bằng tài liệu của bạn, nhưng `ky.py` đang mặc định dùng `DUY.pdf` ở cùng thư mục.
+
+## Ký số PDF
+
+Đặt (tùy chọn) ảnh chữ ký `anh.png` vào cùng thư mục để in đè lên trang ký. Nếu không có ảnh, script vẫn ký hợp lệ nhưng chỉ thêm chữ hiển thị.
+
+```powershell
+python .\ky.py
+```
+
+Kết quả: `Duy_da_ky.pdf`
+
+## Kiểm tra chữ ký
+
+```powershell
+python .\check_ky.py .\Duy_da_ky.pdf --trust-local-pfx
+```
+
+Script sẽ in ra 8 dòng trạng thái và ghi vào `nhat_ky_check.txt`.
+
+Lưu ý: vì dùng chứng chỉ tự ký (không phải CA tin cậy), kiểm tra chuỗi tin cậy có thể KHÔNG HỢP LỆ trừ khi dùng `--trust-local-pfx`.
+
+## Tùy chỉnh
+
+- Đổi mật khẩu PFX: sửa `PFX_PASSWORD` trong `tao_khoa.py` và cập nhật `MAT_KHAU_PFX` trong `ky.py`.
+- Đổi trang hiển thị chữ ký: sửa `dct['page']` trong `ky.py` (0-based; 3 tức là trang 4).
+- Đổi nội dung hiển thị: cập nhật `dct` trong `ky.py`.
